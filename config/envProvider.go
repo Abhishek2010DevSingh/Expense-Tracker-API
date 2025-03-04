@@ -20,7 +20,7 @@ func (e *envProvider) GetPort() string {
 	if port == "" {
 		port = "8080"
 	}
-	return port
+	return ":" + port
 }
 
 func (e *envProvider) GetDatabase() string {
