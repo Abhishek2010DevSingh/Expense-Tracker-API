@@ -1,17 +1,15 @@
-
 version: "1"
 packages:
   - name: "user"
     path: "./internal/repository/user"
-    queries: "./internal/repository/user/queries.sql"
+    queries: "./queries/user.sql"
     schema: "./migrations/20250305053919_user_table.sql"
     engine: "postgresql"
     emit_json_tags: true
     emit_interface: true
-
   - name: "expense"
     path: "./internal/repository/expense"
-    queries: "./internal/repository/expense/queries.sql"
+    queries: "./queries/expense.sql"
     schema: "./migrations/20250305055803_expense_table.sql"
     engine: "postgresql"
     emit_json_tags: true

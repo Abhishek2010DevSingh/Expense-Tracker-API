@@ -6,12 +6,62 @@ package expense
 
 import (
 	"database/sql"
+	"database/sql/driver"
+	"fmt"
 )
 
+type ExpenseCategory string
+
+const (
+	ExpenseCategoryGroceries   ExpenseCategory = "Groceries"
+	ExpenseCategoryLeisure     ExpenseCategory = "Leisure"
+	ExpenseCategoryElectronics ExpenseCategory = "Electronics"
+	ExpenseCategoryUtilities   ExpenseCategory = "Utilities"
+	ExpenseCategoryClothing    ExpenseCategory = "Clothing"
+	ExpenseCategoryHealth      ExpenseCategory = "Health"
+	ExpenseCategoryOthers      ExpenseCategory = "Others"
+)
+
+func (e *ExpenseCategory) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ExpenseCategory(s)
+	case string:
+		*e = ExpenseCategory(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ExpenseCategory: %T", src)
+	}
+	return nil
+}
+
+type NullExpenseCategory struct {
+	ExpenseCategory ExpenseCategory `json:"expense_category"`
+	Valid           bool            `json:"valid"` // Valid is true if ExpenseCategory is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullExpenseCategory) Scan(value interface{}) error {
+	if value == nil {
+		ns.ExpenseCategory, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ExpenseCategory.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullExpenseCategory) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ExpenseCategory), nil
+}
+
 type Expense struct {
-	ID          int32        `json:"id"`
-	UserID      int32        `json:"user_id"`
-	Description string       `json:"description"`
-	Amount      string       `json:"amount"`
-	CreatedDate sql.NullTime `json:"created_date"`
+	ID          int32           `json:"id"`
+	Description string          `json:"description"`
+	Amount      string          `json:"amount"`
+	CreatedDate sql.NullTime    `json:"created_date"`
+	UserID      int32           `json:"user_id"`
+	Category    ExpenseCategory `json:"category"`
 }
