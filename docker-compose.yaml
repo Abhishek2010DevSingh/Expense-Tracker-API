@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:latest
-    container_name: blog_db
+    container_name: expense_db
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
