@@ -2,10 +2,7 @@ module github.com/Abhishek2010DevSingh/Expense-Tracker-API
 
 go 1.23.6
 
-require (
-	github.com/gin-gonic/gin v1.10.0
-	github.com/jmoiron/sqlx v1.4.0
-)
+require github.com/gin-gonic/gin v1.10.0
 
 require (
 	github.com/bytedance/sonic v1.12.10 // indirect

@@ -1,16 +1,16 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func GetDatabase(databaseUrl string) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("postgres", databaseUrl)
+func GetDatabase(databaseUrl string) (*sql.DB, error) {
+	db, err := sql.Open("postgres", databaseUrl)
 	if err != nil {
 		return nil, fmt.Errorf("error connecting to database: %w", err)
 	}
